@@ -1,0 +1,2917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=240,height=320,
+      initial-scale=1,maximum-scale=1,
+      user-scalable=no">
+
+<title>R60 Browser</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#080b10;
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
+
+button,input{
+  font:inherit;
+}
+
+button{
+  border:0;
+}
+
+/* =====================================================
+   BROWSER
+   ===================================================== */
+
+#browser{
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#080c12;
+}
+
+
+/* =====================================================
+   TOP BAR
+   NORMAL HOME = 40px
+   WEB MODE   = 26px
+   ===================================================== */
+
+#topbar{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:40px;
+
+  z-index:1000;
+
+  display:flex;
+  align-items:center;
+  gap:3px;
+
+  padding:3px;
+
+  background:#0a1017;
+  border-bottom:1px solid #303d4b;
+
+  transition:none;
+}
+
+
+/* COMPACT WEB BAR */
+
+#browser.webMode #topbar,
+#browser.desktopMode #topbar{
+  height:26px;
+  padding:2px;
+  gap:2px;
+}
+
+
+/* =====================================================
+   NAV BUTTON
+   ===================================================== */
+
+.navBtn{
+  width:27px;
+  height:32px;
+
+  flex:0 0 27px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:5px;
+
+  color:#dbe7f2;
+  background:#151e28;
+  border:1px solid #33414f;
+}
+
+
+/* WEB = SMALL */
+
+#browser.webMode .navBtn,
+#browser.desktopMode .navBtn{
+  width:20px;
+  height:22px;
+  flex-basis:20px;
+  border-radius:3px;
+}
+
+
+.navBtn svg{
+  width:15px;
+  height:15px;
+}
+
+#browser.webMode .navBtn svg,
+#browser.desktopMode .navBtn svg{
+  width:11px;
+  height:11px;
+}
+
+
+/* =====================================================
+   ADDRESS
+   ===================================================== */
+
+#address{
+  min-width:0;
+  flex:1;
+
+  width:1px;
+
+  height:31px;
+
+  padding:0 6px;
+
+  border-radius:5px;
+
+  outline:none;
+
+  color:#fff;
+  background:#111821;
+
+  border:1px solid #3b4a59;
+
+  font-size:9px;
+}
+
+
+/* WEB SMALL */
+
+#browser.webMode #address,
+#browser.desktopMode #address{
+  height:22px;
+  padding:0 5px;
+  border-radius:3px;
+  font-size:8px;
+}
+
+
+#go{
+  width:29px;
+  height:31px;
+
+  flex:0 0 29px;
+
+  border-radius:5px;
+
+  background:#1769d1;
+  color:#fff;
+
+  font-size:9px;
+  font-weight:bold;
+}
+
+
+/* WEB SMALL */
+
+#browser.webMode #go,
+#browser.desktopMode #go{
+  width:22px;
+  height:22px;
+  flex-basis:22px;
+  border-radius:3px;
+  font-size:7px;
+}
+
+
+/* =====================================================
+   STAGE
+   ===================================================== */
+
+#stage{
+  position:absolute;
+
+  left:0;
+  top:40px;
+
+  width:100%;
+  height:calc(100% - 40px);
+
+  overflow:hidden;
+
+  background:#0b1016;
+}
+
+
+/* WEB STAGE GETS MORE SPACE */
+
+#browser.webMode #stage,
+#browser.desktopMode #stage{
+  top:26px;
+  height:calc(100% - 26px);
+}
+
+
+/* =====================================================
+   HOME
+   ===================================================== */
+
+#home{
+  position:absolute;
+  inset:0;
+
+  overflow:auto;
+
+  padding:10px 7px 45px;
+
+  background:
+    radial-gradient(
+      circle at 50% 0,
+      #1c2c3e,
+      #0b1016 55%
+    );
+}
+
+.homeInner{
+  width:100%;
+}
+
+.logoArea{
+  text-align:center;
+  padding:7px 0 10px;
+}
+
+.logoCircle{
+  width:43px;
+  height:43px;
+
+  margin:auto;
+
+  border-radius:12px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#1769d1;
+  border:1px solid #65a1e7;
+}
+
+.logoCircle svg{
+  width:26px;
+  height:26px;
+}
+
+.logoTitle{
+  margin-top:6px;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.logoSub{
+  margin-top:2px;
+  color:#8fa1b5;
+  font-size:8px;
+}
+
+
+/* =====================================================
+   SEARCH
+   ===================================================== */
+
+.searchBox{
+  width:100%;
+  height:32px;
+
+  display:flex;
+
+  gap:4px;
+
+  margin-bottom:11px;
+}
+
+#homeSearch{
+  min-width:0;
+  flex:1;
+
+  height:32px;
+
+  padding:0 7px;
+
+  color:white;
+
+  background:#121a23;
+
+  border:1px solid #405061;
+
+  border-radius:6px;
+
+  outline:none;
+
+  font-size:9px;
+}
+
+.searchBtn{
+  width:34px;
+  height:32px;
+
+  flex:0 0 34px;
+
+  border-radius:6px;
+
+  background:#1769d1;
+
+  color:white;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.searchBtn svg{
+  width:14px;
+}
+
+
+/* =====================================================
+   QUICK LINKS
+   ===================================================== */
+
+.sectionTitle{
+  margin:7px 2px 5px;
+
+  color:#879bad;
+
+  font-size:8px;
+
+  text-transform:uppercase;
+
+  letter-spacing:.6px;
+}
+
+.linksGrid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:5px;
+}
+
+.quick{
+  height:52px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+
+  align-items:center;
+
+  gap:3px;
+
+  color:white;
+
+  background:#131c26;
+
+  border:1px solid #334251;
+
+  border-radius:7px;
+}
+
+.quick svg{
+  width:18px;
+  height:18px;
+}
+
+.quick span{
+  font-size:7px;
+}
+
+
+/* =====================================================
+   WEB
+   ===================================================== */
+
+#web{
+  position:absolute;
+
+  left:0;
+  top:0;
+
+  width:100%;
+  height:100%;
+
+  margin:0;
+  padding:0;
+
+  border:0;
+
+  display:none;
+
+  background:white;
+}
+
+
+/* =====================================================
+   DESKTOP
+   ===================================================== */
+
+#desktopCanvas{
+  position:absolute;
+
+  inset:0;
+
+  overflow:auto;
+
+  display:none;
+
+  background:white;
+}
+
+#desktopFrame{
+  display:block;
+
+  width:1280px;
+
+  min-height:320px;
+
+  border:0;
+
+  transform-origin:top left;
+}
+
+
+/* =====================================================
+   TOOLS
+   ===================================================== */
+
+#tools{
+  position:absolute;
+
+  right:4px;
+  top:4px;
+
+  width:165px;
+
+  max-height:
+    calc(100% - 8px);
+
+  overflow:auto;
+
+  padding:7px;
+
+  border-radius:8px;
+
+  background:#0d141c;
+
+  border:1px solid #455565;
+
+  box-shadow:
+    0 7px 20px #000c;
+
+  display:none;
+
+  z-index:1500;
+}
+
+.toolsTitle{
+  padding:2px 2px 6px;
+
+  margin-bottom:5px;
+
+  border-bottom:
+    1px solid #2c3946;
+
+  font-size:11px;
+
+  font-weight:bold;
+}
+
+.toolRow{
+  display:flex;
+
+  gap:4px;
+
+  margin:4px 0;
+}
+
+.toolRow button{
+  flex:1;
+
+  min-height:27px;
+
+  border-radius:5px;
+
+  color:#e8f0f7;
+
+  background:#17222e;
+
+  border:1px solid #354555;
+
+  font-size:8px;
+}
+
+
+/* =====================================================
+   ULTRA LIGHT MOUSE
+   ===================================================== */
+
+#mouse{
+
+  position:absolute;
+
+  left:0;
+  top:0;
+
+  width:11px;
+  height:15px;
+
+  z-index:3000;
+
+  pointer-events:none;
+
+  /*
+    IMPORTANT:
+    No transition.
+    No filter.
+    No shadow.
+    No animation.
+  */
+
+  will-change:
+    transform;
+
+  transform:
+    translate3d(8px,8px,0);
+}
+
+#mouse svg{
+  display:block;
+
+  width:11px;
+  height:15px;
+}
+
+
+/* =====================================================
+   FOCUS CORNERS
+   ===================================================== */
+
+#focus{
+
+  position:absolute;
+
+  z-index:2990;
+
+  pointer-events:none;
+
+  display:none;
+}
+
+.corner{
+  position:absolute;
+
+  width:5px;
+  height:5px;
+}
+
+.c1{
+  left:0;
+  top:0;
+
+  border-left:
+    1px solid #58a9ff;
+
+  border-top:
+    1px solid #58a9ff;
+}
+
+.c2{
+  right:0;
+  top:0;
+
+  border-right:
+    1px solid #58a9ff;
+
+  border-top:
+    1px solid #58a9ff;
+}
+
+.c3{
+  left:0;
+  bottom:0;
+
+  border-left:
+    1px solid #58a9ff;
+
+  border-bottom:
+    1px solid #58a9ff;
+}
+
+.c4{
+  right:0;
+  bottom:0;
+
+  border-right:
+    1px solid #58a9ff;
+
+  border-bottom:
+    1px solid #58a9ff;
+}
+
+
+/* =====================================================
+   STATUS
+   ===================================================== */
+
+#statusbar{
+
+  position:absolute;
+
+  left:3px;
+  right:3px;
+
+  bottom:3px;
+
+  height:20px;
+
+  z-index:800;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  padding:0 6px;
+
+  border-radius:5px;
+
+  background:#0b1118ee;
+
+  border:
+    1px solid #2f3c49;
+
+  color:#8798aa;
+
+  font-size:7px;
+
+  pointer-events:none;
+}
+
+
+/*
+  IMPORTANT:
+  Hide bottom status completely
+  when a real website is open.
+*/
+
+#browser.webMode #statusbar,
+#browser.desktopMode #statusbar{
+  display:none;
+}
+
+
+/* =====================================================
+   TOAST
+   ===================================================== */
+
+#toast{
+
+  position:absolute;
+
+  left:50%;
+  bottom:27px;
+
+  transform:
+    translateX(-50%);
+
+  z-index:4000;
+
+  padding:5px 8px;
+
+  border-radius:5px;
+
+  background:#101820f2;
+
+  border:1px solid #506174;
+
+  color:#fff;
+
+  font-size:8px;
+
+  opacity:0;
+
+  pointer-events:none;
+}
+
+#toast.show{
+  opacity:1;
+}
+</style>
+</head>
+
+<body>
+
+<div id="browser">
+
+  <!-- =================================================
+       TOP BAR
+       ================================================= -->
+
+  <div id="topbar">
+
+    <button class="navBtn" id="backBtn">
+      <svg viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2.3">
+        <path d="M15 5l-7 7 7 7"/>
+      </svg>
+    </button>
+
+    <button class="navBtn" id="forwardBtn">
+      <svg viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2.3">
+        <path d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+
+    <button class="navBtn" id="reloadBtn">
+      <svg viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2">
+        <path d="M20 11a8 8 0 0 0-15-4"/>
+        <path d="M5 4v5h5"/>
+        <path d="M4 13a8 8 0 0 0 15 4"/>
+        <path d="M19 20v-5h-5"/>
+      </svg>
+    </button>
+
+    <input
+      id="address"
+      value="https://www.google.com"
+      autocomplete="off"
+      spellcheck="false">
+
+    <button id="go">GO</button>
+
+    <button class="navBtn" id="homeBtn">
+      <svg viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2">
+        <path d="M3 11l9-7 9 7"/>
+        <path d="M5 10v10h14V10"/>
+        <path d="M9 20v-6h6v6"/>
+      </svg>
+    </button>
+
+    <button class="navBtn" id="toolsBtn">
+      <svg viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2">
+        <path d="M12 3v18M3 12h18"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+    </button>
+
+  </div>
+
+
+  <!-- =================================================
+       STAGE
+       ================================================= -->
+
+  <div id="stage">
+
+
+    <!-- HOME -->
+
+    <div id="home">
+
+      <div class="homeInner">
+
+        <div class="logoArea">
+
+          <div class="logoCircle">
+
+            <svg viewBox="0 0 48 48"
+                 fill="none">
+
+              <rect x="10"
+                    y="7"
+                    width="28"
+                    height="34"
+                    rx="5"
+                    stroke="white"
+                    stroke-width="2.5"/>
+
+              <path d="M16 15h16
+                       M16 21h16
+                       M16 27h10"
+                    stroke="white"
+                    stroke-width="2.5"
+                    stroke-linecap="round"/>
+
+            </svg>
+
+          </div>
+
+          <div class="logoTitle">
+            R60 Browser
+          </div>
+
+          <div class="logoSub">
+            Fast • Lightweight • Keypad
+          </div>
+
+        </div>
+
+
+        <!-- SEARCH -->
+
+        <div class="searchBox">
+
+          <input
+            id="homeSearch"
+            placeholder="Search Google or website"
+            autocomplete="off"
+            spellcheck="false">
+
+          <button
+            class="searchBtn"
+            id="searchBtn">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2.4">
+
+              <circle cx="10.5"
+                      cy="10.5"
+                      r="6.5"/>
+
+              <path d="M15.5 15.5L21 21"/>
+
+            </svg>
+
+          </button>
+
+        </div>
+
+
+        <div class="sectionTitle">
+          Quick Access
+        </div>
+
+
+        <!-- QUICK LINKS -->
+
+        <div class="linksGrid">
+
+          <button class="quick"
+                  data-url="https://www.google.com">
+
+            <svg viewBox="0 0 24 24">
+
+              <path fill="#4285F4"
+                d="M21.6 12.23c0-.68-.06-1.33-.17-1.96H12v3.71h5.38a4.6 4.6 0 0 1-1.99 3.02v2.51h3.22c1.89-1.74 2.99-4.31 2.99-7.28z"/>
+
+              <path fill="#34A853"
+                d="M12 22c2.7 0 4.96-.9 6.61-2.49l-3.22-2.51c-.9.6-2.05.96-3.39.96-2.61 0-4.82-1.76-5.61-4.13H3.06v2.59A10 10 0 0 0 12 22z"/>
+
+              <path fill="#FBBC05"
+                d="M6.39 13.83A6 6 0 0 1 6.08 12c0-.64.11-1.26.31-1.83V7.58H3.06A10 10 0 0 0 2 12c0 1.61.39 3.14 1.06 4.42l3.33-2.59z"/>
+
+              <path fill="#EA4335"
+                d="M12 6.04c1.47 0 2.79.51 3.83 1.51l2.87-2.87C16.95 2.99 14.7 2 12 2a10 10 0 0 0-8.94 5.58l3.33 2.59C7.18 7.8 9.39 6.04 12 6.04z"/>
+
+            </svg>
+
+            <span>Google</span>
+
+          </button>
+
+
+          <button class="quick"
+                  data-url="https://www.youtube.com">
+
+            <svg viewBox="0 0 24 24">
+
+              <path fill="#f00"
+                d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/>
+
+              <path fill="#fff"
+                d="M9.5 15.7V8.3l6.2 3.7-6.2 3.7z"/>
+
+            </svg>
+
+            <span>YouTube</span>
+
+          </button>
+
+
+          <button class="quick"
+                  data-url="https://web.imo.im">
+
+            <svg viewBox="0 0 24 24">
+
+              <path fill="#1688ff"
+                d="M5 18.5L3.5 21l3.7-1.5c1.3.7 2.8 1 4.4 1 5.1 0 9.2-3.7 9.2-8.3S16.7 4 11.6 4 2.4 7.7 2.4 12.3c0 2.4 1 4.6 2.6 6.2z"/>
+
+              <circle cx="8" cy="12"
+                      r="1.2"
+                      fill="white"/>
+
+              <circle cx="12" cy="12"
+                      r="1.2"
+                      fill="white"/>
+
+              <circle cx="16" cy="12"
+                      r="1.2"
+                      fill="white"/>
+
+            </svg>
+
+            <span>imo</span>
+
+          </button>
+
+
+          <button class="quick"
+                  data-url="https://www.facebook.com">
+
+            <svg viewBox="0 0 24 24">
+
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+                      fill="#1877F2"/>
+
+              <path fill="white"
+                d="M13.4 20v-7h2.4l.4-2.8h-2.8V8.4c0-.8.2-1.4 1.5-1.4h1.6V4.5c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v1.8H7.8V13h2.5v7h3.1z"/>
+
+            </svg>
+
+            <span>Facebook</span>
+
+          </button>
+
+
+          <button class="quick"
+                  data-url="https://github.com">
+
+            <svg viewBox="0 0 24 24">
+
+              <path fill="white"
+                d="M12 .7A11.3 11.3 0 0 0 8.4 22.1c.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.17.69-3.84-1.34-3.84-1.34-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.67 1.25 3.32.96.1-.74.4-1.25.73-1.54-2.53-.29-5.19-1.27-5.19-5.64 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.03 0 0 .96-.31 3.13 1.17A10.8 10.8 0 0 1 12 6.4c.97 0 1.95.13 2.87.38 2.17-1.48 3.13-1.17 3.13-1.17.62 1.58.23 2.74.11 3.03.73.8 1.18 1.82 1.18 3.07 0 4.38-2.67 5.34-5.21 5.63.41.35.78 1.03.78 2.08 0 1.5-.01 2.71-.01 3.08 0 .3.21.65.79.54A11.3 11.3 0 0 0 12 .7z"/>
+
+            </svg>
+
+            <span>GitHub</span>
+
+          </button>
+
+
+          <button class="quick"
+                  data-url="https://www.wikipedia.org">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="white"
+                 stroke-width="1.4">
+
+              <circle cx="12"
+                      cy="12"
+                      r="9.5"/>
+
+              <path d="M5 8h3
+                       M16 8h3
+                       M8 8l4 8 4-8
+                       M10 8h4"/>
+
+            </svg>
+
+            <span>Wikipedia</span>
+
+          </button>
+
+
+          <button class="quick"
+                  data-url="https://www.apple.com/iphone/">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="white"
+                 stroke-width="1.7">
+
+              <rect x="7"
+                    y="2.5"
+                    width="10"
+                    height="19"
+                    rx="2.2"/>
+
+              <path d="M10 5h4"
+                    stroke-linecap="round"/>
+
+              <circle cx="12"
+                      cy="18.5"
+                      r=".7"
+                      fill="white"/>
+
+            </svg>
+
+            <span>iPhone</span>
+
+          </button>
+
+        </div>
+
+
+        <div class="sectionTitle">
+          Browser
+        </div>
+
+
+        <div class="linksGrid">
+
+          <button class="quick"
+                  id="desktopHome">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8">
+
+              <rect x="3"
+                    y="4"
+                    width="18"
+                    height="13"
+                    rx="1.5"/>
+
+              <path d="M8 21h8M12 17v4"/>
+
+            </svg>
+
+            <span>Desktop</span>
+
+          </button>
+
+
+          <button class="quick"
+                  id="mobileHome">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8">
+
+              <rect x="7"
+                    y="2.5"
+                    width="10"
+                    height="19"
+                    rx="2"/>
+
+              <circle cx="12"
+                      cy="18.5"
+                      r=".7"/>
+
+            </svg>
+
+            <span>Mobile</span>
+
+          </button>
+
+
+          <button class="quick"
+                  id="fullHome">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8">
+
+              <path d="M4 9V4h5
+                       M15 4h5v5
+                       M20 15v5h-5
+                       M9 20H4v-5"/>
+
+            </svg>
+
+            <span>Full</span>
+
+          </button>
+
+
+          <button class="quick"
+                  id="toolsHome">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8">
+
+              <path d="M12 3v18
+                       M3 12h18"/>
+
+              <circle cx="12"
+                      cy="12"
+                      r="3"/>
+
+            </svg>
+
+            <span>Tools</span>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- WEBSITE -->
+
+    <iframe
+      id="web"
+      allow="fullscreen; autoplay">
+    </iframe>
+
+
+    <!-- DESKTOP -->
+
+    <div id="desktopCanvas">
+
+      <iframe
+        id="desktopFrame"
+        allow="fullscreen; autoplay">
+      </iframe>
+
+    </div>
+
+
+    <!-- TOOLS -->
+
+    <div id="tools">
+
+      <div class="toolsTitle">
+        Browser Tools
+      </div>
+
+      <div class="toolRow">
+        <button id="zoomOut">
+          Zoom −
+        </button>
+
+        <button id="zoomIn">
+          Zoom +
+        </button>
+      </div>
+
+      <div class="toolRow">
+        <button id="desktopMode">
+          Desktop
+        </button>
+
+        <button id="mobileMode">
+          Mobile
+        </button>
+      </div>
+
+      <div class="toolRow">
+        <button id="fullscreenBtn">
+          Full
+        </button>
+
+        <button id="homeTool">
+          Home
+        </button>
+      </div>
+
+      <div class="toolRow">
+        <button id="bookmarkBtn">
+          Bookmark
+        </button>
+
+        <button id="historyBtn">
+          History
+        </button>
+      </div>
+
+      <div class="toolRow">
+        <button id="speedDown">
+          Mouse −
+        </button>
+
+        <button id="speedUp">
+          Mouse +
+        </button>
+      </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ULTRA LIGHT MOUSE
+         ================================================= -->
+
+    <div id="mouse">
+
+      <svg viewBox="0 0 24 32"
+           xmlns="http://www.w3.org/2000/svg">
+
+        <path
+          d="M2 1L21 19.7L14.1 20.3
+             L18.3 28.5L14.6 30.2
+             L10.2 21.7L4.5 26Z"
+          fill="white"
+          stroke="#080808"
+          stroke-width="2"
+          stroke-linejoin="round"/>
+
+      </svg>
+
+    </div>
+
+
+    <!-- FOCUS -->
+
+    <div id="focus">
+
+      <span class="corner c1"></span>
+      <span class="corner c2"></span>
+      <span class="corner c3"></span>
+      <span class="corner c4"></span>
+
+    </div>
+
+
+    <div id="toast"></div>
+
+
+    <div id="statusbar">
+
+      <span id="statusText">
+        Ready
+      </span>
+
+      <span id="modeText">
+        Home
+      </span>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+"use strict";
+
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const browser =
+  document.getElementById("browser");
+
+const stage =
+  document.getElementById("stage");
+
+const home =
+  document.getElementById("home");
+
+const web =
+  document.getElementById("web");
+
+const desktopCanvas =
+  document.getElementById("desktopCanvas");
+
+const desktopFrame =
+  document.getElementById("desktopFrame");
+
+const mouse =
+  document.getElementById("mouse");
+
+const focus =
+  document.getElementById("focus");
+
+const tools =
+  document.getElementById("tools");
+
+const address =
+  document.getElementById("address");
+
+const homeSearch =
+  document.getElementById("homeSearch");
+
+const statusText =
+  document.getElementById("statusText");
+
+const modeText =
+  document.getElementById("modeText");
+
+const toast =
+  document.getElementById("toast");
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let mode = "home";
+
+let toolsOpen = false;
+
+let mx = 8;
+let my = 8;
+
+let mouseSpeed = 24;
+
+let zoom = 1;
+
+let raf = 0;
+
+let targetDirty = true;
+
+let currentTarget = null;
+
+
+/* =========================================================
+   CACHE ALL BROWSER UI
+   =========================================================
+
+   This is the main performance fix.
+
+   We DO NOT run querySelectorAll()
+   on every mouse movement.
+   ========================================================= */
+
+const topElements = [
+  document.getElementById("backBtn"),
+  document.getElementById("forwardBtn"),
+  document.getElementById("reloadBtn"),
+  address,
+  document.getElementById("go"),
+  document.getElementById("homeBtn"),
+  document.getElementById("toolsBtn")
+];
+
+const homeElements =
+  Array.from(
+    home.querySelectorAll(
+      "button,input"
+    )
+  );
+
+const toolElements =
+  Array.from(
+    tools.querySelectorAll(
+      "button,input"
+    )
+  );
+
+
+/* =========================================================
+   RECT CACHE
+   ========================================================= */
+
+let topRects = [];
+let homeRects = [];
+let toolRects = [];
+
+
+function updateRects(){
+
+  const sr =
+    stage.getBoundingClientRect();
+
+
+  topRects =
+    topElements.map(el => {
+
+      const r =
+        el.getBoundingClientRect();
+
+      return {
+        el:el,
+        l:r.left-sr.left,
+        t:r.top-sr.top,
+        r:r.right-sr.left,
+        b:r.bottom-sr.top
+      };
+
+    });
+
+
+  homeRects =
+    homeElements.map(el => {
+
+      const r =
+        el.getBoundingClientRect();
+
+      return {
+        el:el,
+        l:r.left-sr.left,
+        t:r.top-sr.top,
+        r:r.right-sr.left,
+        b:r.bottom-sr.top
+      };
+
+    });
+
+
+  toolRects =
+    toolElements.map(el => {
+
+      const r =
+        el.getBoundingClientRect();
+
+      return {
+        el:el,
+        l:r.left-sr.left,
+        t:r.top-sr.top,
+        r:r.right-sr.left,
+        b:r.bottom-sr.top
+      };
+
+    });
+
+
+  targetDirty = true;
+
+}
+
+
+/* =========================================================
+   POINT IN RECT
+   ========================================================= */
+
+function inside(x,y,r){
+
+  return (
+    x >= r.l &&
+    x <= r.r &&
+    y >= r.t &&
+    y <= r.b
+  );
+
+}
+
+
+/* =========================================================
+   FAST TARGET
+   ========================================================= */
+
+function findTarget(){
+
+  const x = mx;
+  const y = my;
+
+
+  /*
+    TOP MENU ALWAYS HAS PRIORITY.
+  */
+
+  for(let i=0;i<topRects.length;i++){
+
+    if(
+      inside(
+        x,
+        y,
+        topRects[i]
+      )
+    ){
+
+      return topRects[i].el;
+
+    }
+
+  }
+
+
+  /*
+    TOOLS
+  */
+
+  if(toolsOpen){
+
+    for(let i=0;i<toolRects.length;i++){
+
+      if(
+        inside(
+          x,
+          y,
+          toolRects[i]
+        )
+      ){
+
+        return toolRects[i].el;
+
+      }
+
+    }
+
+  }
+
+
+  /*
+    HOME
+  */
+
+  if(mode === "home"){
+
+    for(let i=0;i<homeRects.length;i++){
+
+      if(
+        inside(
+          x,
+          y,
+          homeRects[i]
+        )
+      ){
+
+        return homeRects[i].el;
+
+      }
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+function updateFocus(){
+
+  if(
+    !targetDirty &&
+    currentTarget
+  ){
+
+    return;
+
+  }
+
+  targetDirty = false;
+
+
+  const target =
+    findTarget();
+
+
+  if(
+    target === currentTarget
+  ){
+
+    return;
+
+  }
+
+
+  currentTarget =
+    target;
+
+
+  if(!target){
+
+    focus.style.display =
+      "none";
+
+    statusText.textContent =
+      mode === "home"
+        ? "Home"
+        : "Ready";
+
+    return;
+
+  }
+
+
+  const sr =
+    stage.getBoundingClientRect();
+
+  const r =
+    target.getBoundingClientRect();
+
+
+  focus.style.left =
+    (r.left-sr.left) + "px";
+
+  focus.style.top =
+    (r.top-sr.top) + "px";
+
+  focus.style.width =
+    r.width + "px";
+
+  focus.style.height =
+    r.height + "px";
+
+  focus.style.display =
+    "block";
+
+
+  statusText.textContent =
+    target.innerText ||
+    target.placeholder ||
+    target.title ||
+    "Select";
+
+}
+
+
+/* =========================================================
+   FAST MOUSE RENDER
+   ========================================================= */
+
+function renderMouse(){
+
+  mouse.style.transform =
+    "translate3d(" +
+    mx +
+    "px," +
+    my +
+    "px,0)";
+
+  raf = 0;
+
+}
+
+
+function drawMouse(){
+
+  if(raf)
+    return;
+
+  raf =
+    requestAnimationFrame(
+      renderMouse
+    );
+
+}
+
+
+/* =========================================================
+   MOVE
+   ========================================================= */
+
+function moveMouse(dx,dy){
+
+  const w =
+    stage.clientWidth;
+
+  const h =
+    stage.clientHeight;
+
+
+  mx +=
+    dx * mouseSpeed;
+
+  my +=
+    dy * mouseSpeed;
+
+
+  /*
+    HOME EDGE SCROLL
+  */
+
+  const edge = 18;
+
+
+  if(
+    mode === "home"
+  ){
+
+    if(
+      my >= h-edge
+    ){
+
+      home.scrollTop +=
+        mouseSpeed;
+
+      my =
+        h-edge;
+
+      updateRects();
+
+    }
+
+
+    if(
+      my <= edge
+    ){
+
+      home.scrollTop -=
+        mouseSpeed;
+
+      my =
+        edge;
+
+      updateRects();
+
+    }
+
+  }
+
+
+  /*
+    DESKTOP EDGE SCROLL
+  */
+
+  if(
+    mode === "desktop"
+  ){
+
+    if(
+      my >= h-edge
+    ){
+
+      desktopCanvas.scrollTop +=
+        mouseSpeed;
+
+      my =
+        h-edge;
+
+    }
+
+
+    if(
+      my <= edge
+    ){
+
+      desktopCanvas.scrollTop -=
+        mouseSpeed;
+
+      my =
+        edge;
+
+    }
+
+  }
+
+
+  /*
+    KEEP CURSOR INSIDE SCREEN
+  */
+
+  if(mx < 1)
+    mx = 1;
+
+  if(my < 1)
+    my = 1;
+
+  if(mx > w-2)
+    mx = w-2;
+
+  if(my > h-2)
+    my = h-2;
+
+
+  targetDirty = true;
+
+  drawMouse();
+
+  updateFocus();
+
+}
+
+
+/* =========================================================
+   CLICK
+   ========================================================= */
+
+function clickMouse(){
+
+  const target =
+    findTarget();
+
+
+  if(!target){
+
+    showToast(
+      "Nothing to click"
+    );
+
+    return;
+
+  }
+
+
+  /*
+    INPUT FOCUS
+  */
+
+  if(
+    target.tagName === "INPUT" ||
+    target.tagName === "TEXTAREA"
+  ){
+
+    target.focus();
+
+    return;
+
+  }
+
+
+  target.click();
+
+}
+
+
+/* =========================================================
+   URL
+   ========================================================= */
+
+function normalizeURL(v){
+
+  v =
+    v.trim();
+
+  if(!v)
+    return "";
+
+
+  if(
+    /^https?:\/\//i.test(v)
+  ){
+
+    return v;
+
+  }
+
+
+  if(
+    v.includes(".") &&
+    !v.includes(" ")
+  ){
+
+    return (
+      "https://" + v
+    );
+
+  }
+
+
+  return (
+    "https://www.google.com/search?q=" +
+    encodeURIComponent(v)
+  );
+
+}
+
+
+/* =========================================================
+   OPEN WEBSITE
+   ========================================================= */
+
+function openURL(value){
+
+  const url =
+    normalizeURL(value);
+
+
+  if(!url)
+    return;
+
+
+  address.value =
+    url;
+
+
+  mode =
+    "web";
+
+
+  /*
+    COMPACT MODE
+  */
+
+  browser.classList.remove(
+    "desktopMode"
+  );
+
+  browser.classList.add(
+    "webMode"
+  );
+
+
+  home.style.display =
+    "none";
+
+  desktopCanvas.style.display =
+    "none";
+
+  web.style.display =
+    "block";
+
+
+  web.src =
+    url;
+
+
+  modeText.textContent =
+    "Web";
+
+
+  /*
+    Reset cursor to top-left
+    where controls are easy to access.
+  */
+
+  mx = 3;
+  my = 3;
+
+
+  /*
+    Browser changed size,
+    so recalculate only once.
+  */
+
+  setTimeout(
+    ()=>{
+      updateRects();
+      drawMouse();
+      updateFocus();
+    },
+    0
+  );
+
+}
+
+
+/* =========================================================
+   HOME
+   ========================================================= */
+
+function goHome(){
+
+  mode =
+    "home";
+
+
+  browser.classList.remove(
+    "webMode",
+    "desktopMode"
+  );
+
+
+  home.style.display =
+    "block";
+
+  web.style.display =
+    "none";
+
+  desktopCanvas.style.display =
+    "none";
+
+
+  tools.style.display =
+    "none";
+
+  toolsOpen =
+    false;
+
+
+  address.value =
+    "https://www.google.com";
+
+
+  home.scrollTop =
+    0;
+
+
+  mx = 8;
+  my = 8;
+
+
+  modeText.textContent =
+    "Home";
+
+
+  setTimeout(
+    ()=>{
+      updateRects();
+      drawMouse();
+      updateFocus();
+    },
+    0
+  );
+
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+function search(){
+
+  const q =
+    homeSearch.value.trim();
+
+
+  if(!q){
+
+    homeSearch.focus();
+
+    return;
+
+  }
+
+
+  openURL(q);
+
+}
+
+
+/* =========================================================
+   TOOLS
+   ========================================================= */
+
+function toggleTools(){
+
+  toolsOpen =
+    !toolsOpen;
+
+
+  tools.style.display =
+    toolsOpen
+      ? "block"
+      : "none";
+
+
+  setTimeout(
+    ()=>{
+      updateRects();
+      updateFocus();
+    },
+    0
+  );
+
+}
+
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+function desktopMode(){
+
+  const url =
+    normalizeURL(
+      address.value ||
+      "https://www.google.com"
+    );
+
+
+  mode =
+    "desktop";
+
+
+  browser.classList.remove(
+    "webMode"
+  );
+
+  browser.classList.add(
+    "desktopMode"
+  );
+
+
+  home.style.display =
+    "none";
+
+  web.style.display =
+    "none";
+
+  desktopCanvas.style.display =
+    "block";
+
+
+  desktopFrame.src =
+    url;
+
+
+  scaleDesktop();
+
+
+  modeText.textContent =
+    "Desktop";
+
+
+  setTimeout(
+    ()=>{
+      updateRects();
+      updateFocus();
+    },
+    0
+  );
+
+}
+
+
+/* =========================================================
+   DESKTOP SCALE
+   ========================================================= */
+
+function scaleDesktop(){
+
+  const width =
+    desktopCanvas.clientWidth;
+
+
+  if(!width)
+    return;
+
+
+  const scale =
+    Math.min(
+      1,
+      width / 1280
+    );
+
+
+  desktopFrame.style.transform =
+    "scale(" + scale + ")";
+
+
+  desktopFrame.style.width =
+    (1280 / scale) + "px";
+
+
+  desktopFrame.style.minHeight =
+    (desktopCanvas.clientHeight / scale) + "px";
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+function mobileMode(){
+
+  const url =
+    normalizeURL(
+      address.value ||
+      "https://www.google.com"
+    );
+
+
+  mode =
+    "web";
+
+
+  browser.classList.remove(
+    "desktopMode"
+  );
+
+  browser.classList.add(
+    "webMode"
+  );
+
+
+  home.style.display =
+    "none";
+
+  desktopCanvas.style.display =
+    "none";
+
+  web.style.display =
+    "block";
+
+
+  web.src =
+    url;
+
+
+  modeText.textContent =
+    "Mobile";
+
+
+  setTimeout(
+    ()=>{
+      updateRects();
+      updateFocus();
+    },
+    0
+  );
+
+}
+
+
+/* =========================================================
+   FULLSCREEN
+   ========================================================= */
+
+function fullScreen(){
+
+  if(
+    !document.fullscreenElement
+  ){
+
+    if(
+      document.documentElement
+        .requestFullscreen
+    ){
+
+      document.documentElement
+        .requestFullscreen();
+
+    }
+
+  }
+  else{
+
+    if(
+      document.exitFullscreen
+    ){
+
+      document.exitFullscreen();
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   ZOOM
+   ========================================================= */
+
+function setZoom(v){
+
+  zoom =
+    Math.max(
+      .6,
+      Math.min(2,v)
+    );
+
+
+  if(mode === "home"){
+
+    home.style.zoom =
+      zoom;
+
+    updateRects();
+
+  }
+
+
+  showToast(
+    "Zoom " +
+    Math.round(
+      zoom*100
+    ) +
+    "%"
+  );
+
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer = 0;
+
+
+function showToast(text){
+
+  toast.textContent =
+    text;
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  clearTimeout(
+    toastTimer
+  );
+
+
+  toastTimer =
+    setTimeout(
+      ()=>{
+        toast.classList.remove(
+          "show"
+        );
+      },
+      700
+    );
+
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+document.getElementById(
+  "go"
+).onclick =
+  ()=>{
+    openURL(address.value);
+  };
+
+
+address.onkeydown =
+  e=>{
+
+    if(
+      e.key === "Enter"
+    ){
+
+      openURL(
+        address.value
+      );
+
+      e.preventDefault();
+
+    }
+
+  };
+
+
+document.getElementById(
+  "backBtn"
+).onclick =
+  ()=>{
+
+    try{
+
+      if(mode === "web")
+        web.contentWindow.history.back();
+
+      else if(mode === "desktop")
+        desktopFrame.contentWindow.history.back();
+
+    }catch(e){}
+
+  };
+
+
+document.getElementById(
+  "forwardBtn"
+).onclick =
+  ()=>{
+
+    try{
+
+      if(mode === "web")
+        web.contentWindow.history.forward();
+
+      else if(mode === "desktop")
+        desktopFrame.contentWindow.history.forward();
+
+    }catch(e){}
+
+  };
+
+
+document.getElementById(
+  "reloadBtn"
+).onclick =
+  ()=>{
+
+    if(mode === "web")
+      web.src = web.src;
+
+    if(mode === "desktop")
+      desktopFrame.src =
+        desktopFrame.src;
+
+    showToast(
+      "Reload"
+    );
+
+  };
+
+
+document.getElementById(
+  "homeBtn"
+).onclick =
+  goHome;
+
+
+document.getElementById(
+  "toolsBtn"
+).onclick =
+  toggleTools;
+
+
+/* =========================================================
+   HOME
+   ========================================================= */
+
+document.getElementById(
+  "searchBtn"
+).onclick =
+  search;
+
+
+homeSearch.onkeydown =
+  e=>{
+
+    if(
+      e.key === "Enter"
+    ){
+
+      search();
+
+      e.preventDefault();
+
+    }
+
+  };
+
+
+document.querySelectorAll(
+  ".quick[data-url]"
+).forEach(
+  btn=>{
+
+    btn.onclick =
+      ()=>{
+        openURL(
+          btn.dataset.url
+        );
+      };
+
+  }
+);
+
+
+document.getElementById(
+  "desktopHome"
+).onclick =
+  desktopMode;
+
+
+document.getElementById(
+  "mobileHome"
+).onclick =
+  mobileMode;
+
+
+document.getElementById(
+  "fullHome"
+).onclick =
+  fullScreen;
+
+
+document.getElementById(
+  "toolsHome"
+).onclick =
+  toggleTools;
+
+
+/* =========================================================
+   TOOLS
+   ========================================================= */
+
+document.getElementById(
+  "zoomIn"
+).onclick =
+  ()=>{
+    setZoom(
+      zoom+.1
+    );
+  };
+
+
+document.getElementById(
+  "zoomOut"
+).onclick =
+  ()=>{
+    setZoom(
+      zoom-.1
+    );
+  };
+
+
+document.getElementById(
+  "desktopMode"
+).onclick =
+  desktopMode;
+
+
+document.getElementById(
+  "mobileMode"
+).onclick =
+  mobileMode;
+
+
+document.getElementById(
+  "fullscreenBtn"
+).onclick =
+  fullScreen;
+
+
+document.getElementById(
+  "homeTool"
+).onclick =
+  goHome;
+
+
+document.getElementById(
+  "historyBtn"
+).onclick =
+  ()=>{
+    showToast(
+      "History"
+    );
+  };
+
+
+document.getElementById(
+  "bookmarkBtn"
+).onclick =
+  ()=>{
+    showToast(
+      "Bookmark saved"
+    );
+  };
+
+
+document.getElementById(
+  "speedDown"
+).onclick =
+  ()=>{
+
+    mouseSpeed =
+      Math.max(
+        8,
+        mouseSpeed-4
+      );
+
+    showToast(
+      "Mouse " +
+      mouseSpeed
+    );
+
+  };
+
+
+document.getElementById(
+  "speedUp"
+).onclick =
+  ()=>{
+
+    mouseSpeed =
+      Math.min(
+        60,
+        mouseSpeed+4
+      );
+
+    showToast(
+      "Mouse " +
+      mouseSpeed
+    );
+
+  };
+
+
+/* =========================================================
+   KEYPAD
+   ========================================================= */
+
+document.addEventListener(
+  "keydown",
+  e=>{
+
+    const active =
+      document.activeElement;
+
+
+    const typing =
+      active &&
+      (
+        active.tagName === "INPUT" ||
+        active.tagName === "TEXTAREA"
+      );
+
+
+    /*
+      NORMAL TYPING
+    */
+
+    if(typing){
+
+      if(
+        e.key === "Enter"
+      ){
+
+        if(
+          active === address
+        ){
+
+          openURL(
+            address.value
+          );
+
+          e.preventDefault();
+
+          return;
+
+        }
+
+
+        if(
+          active === homeSearch
+        ){
+
+          search();
+
+          e.preventDefault();
+
+          return;
+
+        }
+
+      }
+
+
+      if(
+        e.key === "Escape"
+      ){
+
+        active.blur();
+
+        e.preventDefault();
+
+      }
+
+
+      if(
+        ![
+          "ArrowUp",
+          "ArrowDown",
+          "ArrowLeft",
+          "ArrowRight",
+          "Escape"
+        ].includes(e.key)
+      ){
+
+        return;
+
+      }
+
+    }
+
+
+    /* MOUSE */
+
+    if(
+      e.key === "ArrowUp"
+    ){
+
+      moveMouse(0,-1);
+
+      e.preventDefault();
+
+      return;
+
+    }
+
+
+    if(
+      e.key === "ArrowDown"
+    ){
+
+      moveMouse(0,1);
+
+      e.preventDefault();
+
+      return;
+
+    }
+
+
+    if(
+      e.key === "ArrowLeft"
+    ){
+
+      moveMouse(-1,0);
+
+      e.preventDefault();
+
+      return;
+
+    }
+
+
+    if(
+      e.key === "ArrowRight"
+    ){
+
+      moveMouse(1,0);
+
+      e.preventDefault();
+
+      return;
+
+    }
+
+
+    /* OK */
+
+    if(
+      e.key === "Enter" ||
+      e.key === " "
+    ){
+
+      clickMouse();
+
+      e.preventDefault();
+
+      return;
+
+    }
+
+
+    /* ESC BACK */
+
+    if(
+      e.key === "Escape"
+    ){
+
+      if(toolsOpen){
+
+        toggleTools();
+
+        return;
+
+      }
+
+
+      if(mode === "web"){
+
+        try{
+
+          web.contentWindow
+            .history.back();
+
+        }catch(e){}
+
+      }
+      else if(
+        mode === "desktop"
+      ){
+
+        try{
+
+          desktopFrame
+            .contentWindow
+            .history.back();
+
+        }catch(e){}
+
+      }
+      else{
+
+        goHome();
+
+      }
+
+
+      e.preventDefault();
+
+      return;
+
+    }
+
+
+    /* SHORTCUTS */
+
+    switch(e.key){
+
+      case "0":
+        fullScreen();
+        break;
+
+      case "1":
+        goHome();
+        break;
+
+      case "2":
+        address.focus();
+        address.select();
+        break;
+
+      case "3":
+        desktopMode();
+        break;
+
+      case "4":
+        mobileMode();
+        break;
+
+      case "5":
+        toggleTools();
+        break;
+
+      case "8":
+
+        if(mode === "web")
+          web.src = web.src;
+
+        if(mode === "desktop")
+          desktopFrame.src =
+            desktopFrame.src;
+
+        break;
+
+      case "*":
+        setZoom(
+          zoom-.1
+        );
+        break;
+
+      case "#":
+        setZoom(
+          zoom+.1
+        );
+        break;
+
+    }
+
+  },
+  {
+    passive:false
+  }
+);
+
+
+/* =========================================================
+   RESIZE
+   ========================================================= */
+
+window.addEventListener(
+  "resize",
+  ()=>{
+
+    scaleDesktop();
+
+    updateRects();
+
+    mx =
+      Math.min(
+        mx,
+        stage.clientWidth-2
+      );
+
+    my =
+      Math.min(
+        my,
+        stage.clientHeight-2
+      );
+
+    drawMouse();
+
+    updateFocus();
+
+  }
+);
+
+
+/* =========================================================
+   INITIAL
+   ========================================================= */
+
+goHome();
+
+</script>
+
+</body>
+</html>
